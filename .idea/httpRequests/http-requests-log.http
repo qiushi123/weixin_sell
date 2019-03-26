@@ -1,0 +1,32 @@
+GET http://localhost:8080/sell/buyer/order/list?openid=18eu2jwk2kse3r42e2e
+Accept: */*
+Cache-Control: no-cache
+
+<> 2019-03-26T111254.200.json
+
+###
+
+GET http://localhost:8080/sell/buyer/order/list?openid=18eu2jwk2kse3r42e2e
+Accept: */*
+Cache-Control: no-cache
+
+<> 2019-03-26T111252.200.json
+
+###
+
+GET http://localhost:8080/sell/buyer/order/list
+Accept: */*
+Cache-Control: no-cache
+
+<> 2019-03-26T111230.400.json
+
+###
+
+GET http://localhost:8080/sell/buyer/product/list
+Accept: */*
+Cache-Control: no-cache
+
+<> 2019-03-26T111153.200.json
+
+###
+
