@@ -1,3 +1,51 @@
+GET http://localhost:8080/sell/admin/loginAdmin?async=true&username=111111&password=1111111
+Accept: */*
+Cache-Control: no-cache
+
+<> 2019-03-29T112743.404.json
+
+###
+
+GET http://localhost:8080/sell/admin/loginAdmin?async=true&username=111111&password=1111111
+Accept: */*
+Cache-Control: no-cache
+
+<> 2019-03-29T112741.404.json
+
+###
+
+GET http://localhost:8080/sell/seller/loginAdmin?async=true&username=111111&password=1111111
+Accept: */*
+Cache-Control: no-cache
+
+<> 2019-03-29T111705.404.json
+
+###
+
+GET http://localhost:8080/sell/seller/loginAdmin?async=true&username=111111&password=1111111
+Accept: */*
+Cache-Control: no-cache
+
+<> 2019-03-29T111648.404.json
+
+###
+
+GET http://localhost:8080/sell/seller/loginAdmin?async=true&username=111111&password=1111111
+Accept: */*
+Cache-Control: no-cache
+
+<> 2019-03-29T111535.404.json
+
+###
+
+GET http://localhost:8080/sell/seller/loginAdmin?openid=18eu2jwk2kse3r42e2e&async=true&username=111111&password=1111111
+Accept: */*
+Cache-Control: no-cache
+
+<> 2019-03-29T111458.404.json
+
+###
+
 GET http://localhost:8080/sell/buyer/order/list?openid=18eu2jwk2kse3r42e2e
 Accept: */*
 Cache-Control: no-cache

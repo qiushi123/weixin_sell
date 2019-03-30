@@ -1,7 +1,8 @@
 package com.imooc.form;
 
-import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
+
+import lombok.Data;
 
 /**
  * Created by 廖师兄
@@ -23,9 +24,9 @@ public class OrderForm {
     private String phone;
 
     /**
-     * 买家地址
+     * 买家桌号
      */
-    @NotEmpty(message = "地址必填")
+    @NotEmpty(message = "桌号必填")
     private String address;
 
     /**

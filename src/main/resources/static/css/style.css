@@ -262,3 +262,9 @@ html {
   display: block;
   opacity: 1;
 }
+
+
+/* 登录页*/
+.login{
+  margin-top: 20%;
+}

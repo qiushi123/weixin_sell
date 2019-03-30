@@ -12,9 +12,12 @@ import com.imooc.enums.ResultEnum;
 import com.imooc.exception.SellException;
 import com.imooc.repository.OrderDetailRepository;
 import com.imooc.repository.OrderMasterRepository;
-import com.imooc.service.*;
+import com.imooc.service.OrderService;
+import com.imooc.service.PayService;
+import com.imooc.service.ProductService;
+import com.imooc.service.WebSocket;
 import com.imooc.utils.KeyUtil;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,6 +31,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Created by 廖师兄
@@ -49,8 +54,6 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private PayService payService;
 
-    @Autowired
-    private PushMessageService pushMessageService;
 
     @Autowired
     private WebSocket webSocket;
@@ -62,11 +65,11 @@ public class OrderServiceImpl implements OrderService {
         String orderId = KeyUtil.genUniqueKey();
         BigDecimal orderAmount = new BigDecimal(BigInteger.ZERO);
 
-//        List<CartDTO> cartDTOList = new ArrayList<>();
+        //        List<CartDTO> cartDTOList = new ArrayList<>();
 
         //1. 查询商品（数量, 价格）
-        for (OrderDetail orderDetail: orderDTO.getOrderDetailList()) {
-            ProductInfo productInfo =  productService.findOne(orderDetail.getProductId());
+        for (OrderDetail orderDetail : orderDTO.getOrderDetailList()) {
+            ProductInfo productInfo = productService.findOne(orderDetail.getProductId());
             if (productInfo == null) {
                 throw new SellException(ResultEnum.PRODUCT_NOT_EXIST);
             }
@@ -82,8 +85,8 @@ public class OrderServiceImpl implements OrderService {
             BeanUtils.copyProperties(productInfo, orderDetail);
             orderDetailRepository.save(orderDetail);
 
-//            CartDTO cartDTO = new CartDTO(orderDetail.getProductId(), orderDetail.getProductQuantity());
-//            cartDTOList.add(cartDTO);
+            //            CartDTO cartDTO = new CartDTO(orderDetail.getProductId(), orderDetail.getProductQuantity());
+            //            cartDTOList.add(cartDTO);
         }
 
 
@@ -193,10 +196,6 @@ public class OrderServiceImpl implements OrderService {
             log.error("【完结订单】更新失败, orderMaster={}", orderMaster);
             throw new SellException(ResultEnum.ORDER_UPDATE_FAIL);
         }
-
-        //推送微信模版消息
-        pushMessageService.orderStatus(orderDTO);
-
         return orderDTO;
     }
 

@@ -4,7 +4,7 @@ import com.imooc.dataobject.OrderDetail;
 import com.imooc.dto.OrderDTO;
 import com.imooc.enums.OrderStatusEnum;
 import com.imooc.enums.PayStatusEnum;
-import lombok.extern.slf4j.Slf4j;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +16,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Created by 廖师兄
@@ -45,11 +47,11 @@ public class OrderServiceImplTest {
         //购物车
         List<OrderDetail> orderDetailList = new ArrayList<>();
         OrderDetail o1 = new OrderDetail();
-        o1.setProductId("1234568");
+        o1.setProductId("1553653244066288933");
         o1.setProductQuantity(1);
 
         OrderDetail o2 = new OrderDetail();
-        o2.setProductId("123457");
+        o2.setProductId("1553653244066288933");
         o2.setProductQuantity(2);
 
         orderDetailList.add(o1);

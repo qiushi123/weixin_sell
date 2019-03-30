@@ -7,11 +7,12 @@ import com.imooc.enums.OrderStatusEnum;
 import com.imooc.enums.PayStatusEnum;
 import com.imooc.utils.EnumUtil;
 import com.imooc.utils.serializer.Date2LongSerializer;
-import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+
+import lombok.Data;
 
 /**
  * Created by 廖师兄
@@ -31,7 +32,7 @@ public class OrderDTO {
     /** 买家手机号. */
     private String buyerPhone;
 
-    /** 买家地址. */
+    /** 买家桌号. */
     private String buyerAddress;
 
     /** 买家微信Openid. */

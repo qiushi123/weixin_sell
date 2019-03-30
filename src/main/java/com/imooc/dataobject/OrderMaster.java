@@ -2,13 +2,16 @@ package com.imooc.dataobject;
 
 import com.imooc.enums.OrderStatusEnum;
 import com.imooc.enums.PayStatusEnum;
-import lombok.Data;
+
 import org.hibernate.annotations.DynamicUpdate;
+
+import java.math.BigDecimal;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.math.BigDecimal;
-import java.util.Date;
+
+import lombok.Data;
 
 /**
  * Created by 廖师兄
@@ -29,7 +32,7 @@ public class OrderMaster {
     /** 买家手机号. */
     private String buyerPhone;
 
-    /** 买家地址. */
+    /** 买家桌号. */
     private String buyerAddress;
 
     /** 买家微信Openid. */

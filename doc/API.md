@@ -1,5 +1,14 @@
 # API
 
+### 管理后台
+- 1查看订单
+
+http://localhost:8080/sell/seller/category/list
+
+
+
+
+
 ###商品列表
 
 ```
