@@ -21,7 +21,7 @@
                             <th>地址</th>
                             <th>金额</th>
                             <th>订单状态</th>
-                            <th>支付状态</th>
+                            <#--<th>支付状态</th>-->
                             <th>创建时间</th>
                             <th colspan="2">操作</th>
                         </tr>
@@ -36,7 +36,7 @@
                             <td>${orderDTO.buyerAddress}</td>
                             <td>${orderDTO.orderAmount}</td>
                             <td>${orderDTO.getOrderStatusEnum().message}</td>
-                            <td>${orderDTO.getPayStatusEnum().message}</td>
+                            <#--<td>${orderDTO.getPayStatusEnum().message}</td>-->
                             <td>${orderDTO.createTime}</td>
                             <td><a href="/sell/seller/order/detail?orderId=${orderDTO.orderId}">详情</a></td>
                             <td>

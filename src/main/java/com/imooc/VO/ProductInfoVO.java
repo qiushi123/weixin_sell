@@ -1,9 +1,10 @@
 package com.imooc.VO;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
 
 import java.math.BigDecimal;
+
+import lombok.Data;
 
 /**
  * 商品详情
@@ -22,7 +23,11 @@ public class ProductInfoVO {
     @JsonProperty("price")
     private BigDecimal productPrice;
 
-    @JsonProperty("description")
+    /** 库存. */
+    @JsonProperty("stock")
+    private Integer productStock;
+
+    @JsonProperty("desc")
     private String productDescription;
 
     @JsonProperty("icon")

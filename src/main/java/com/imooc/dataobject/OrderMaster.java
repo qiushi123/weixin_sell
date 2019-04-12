@@ -1,7 +1,6 @@
 package com.imooc.dataobject;
 
 import com.imooc.enums.OrderStatusEnum;
-import com.imooc.enums.PayStatusEnum;
 
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -45,7 +44,7 @@ public class OrderMaster {
     private Integer orderStatus = OrderStatusEnum.NEW.getCode();
 
     /** 支付状态, 默认为0未支付. */
-    private Integer payStatus = PayStatusEnum.WAIT.getCode();
+    private Integer payStatus = 0;
 
     /** 创建时间. */
     private Date createTime;

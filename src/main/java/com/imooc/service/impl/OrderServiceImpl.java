@@ -7,13 +7,11 @@ import com.imooc.dataobject.ProductInfo;
 import com.imooc.dto.CartDTO;
 import com.imooc.dto.OrderDTO;
 import com.imooc.enums.OrderStatusEnum;
-import com.imooc.enums.PayStatusEnum;
 import com.imooc.enums.ResultEnum;
 import com.imooc.exception.SellException;
 import com.imooc.repository.OrderDetailRepository;
 import com.imooc.repository.OrderMasterRepository;
 import com.imooc.service.OrderService;
-import com.imooc.service.PayService;
 import com.imooc.service.ProductService;
 import com.imooc.service.WebSocket;
 import com.imooc.utils.KeyUtil;
@@ -95,8 +93,7 @@ public class OrderServiceImpl implements OrderService {
         orderDTO.setOrderId(orderId);
         BeanUtils.copyProperties(orderDTO, orderMaster);
         orderMaster.setOrderAmount(orderAmount);
-        orderMaster.setOrderStatus(OrderStatusEnum.NEW.getCode());
-        orderMaster.setPayStatus(PayStatusEnum.WAIT.getCode());
+        orderMaster.setOrderStatus(OrderStatusEnum.NEW_PAYED.getCode());
         orderMasterRepository.save(orderMaster);
 
         //4. 扣库存
@@ -127,6 +124,8 @@ public class OrderServiceImpl implements OrderService {
         OrderDTO orderDTO = new OrderDTO();
         BeanUtils.copyProperties(orderMaster, orderDTO);
         orderDTO.setOrderDetailList(orderDetailList);
+        orderDTO.setOrderStatusStr(orderDTO.getOrderStatusStr(orderDTO.getOrderStatus()));
+
 
         return orderDTO;
     }
@@ -138,6 +137,13 @@ public class OrderServiceImpl implements OrderService {
         List<OrderDTO> orderDTOList = OrderMaster2OrderDTOConverter.convert(orderMasterPage.getContent());
 
         return new PageImpl<OrderDTO>(orderDTOList, pageable, orderMasterPage.getTotalElements());
+    }
+
+    //查询不同订单状态列表
+    @Override
+    public List<OrderDTO> findListStats(String buyerOpenid, Integer orderStatus) {
+        List<OrderMaster> orderMasters = orderMasterRepository.findByBuyerOpenidAndOrderStatus(buyerOpenid, orderStatus);
+        return OrderMaster2OrderDTOConverter.convert(orderMasters);
     }
 
     @Override
@@ -171,18 +177,22 @@ public class OrderServiceImpl implements OrderService {
         productService.increaseStock(cartDTOList);
 
         //如果已支付, 需要退款
-        if (orderDTO.getPayStatus().equals(PayStatusEnum.SUCCESS.getCode())) {
+        if (orderDTO.getOrderStatus().equals(OrderStatusEnum.NEW_PAYED)) {
             payService.refund(orderDTO);
         }
-
         return orderDTO;
     }
 
     @Override
     @Transactional
     public OrderDTO finish(OrderDTO orderDTO) {
-        //判断订单状态
-        if (!orderDTO.getOrderStatus().equals(OrderStatusEnum.NEW.getCode())) {
+        //提示用户支付
+        if (orderDTO.getOrderStatus().equals(OrderStatusEnum.NEW.getCode())) {
+            log.error("【完结订单】订单状态不正确, orderId={}, orderStatus={}", orderDTO.getOrderId(), orderDTO.getOrderStatus());
+            throw new SellException(ResultEnum.ORDER_NO_PAY);
+        }
+        //只有已支付订单才可以完结订单
+        if (!orderDTO.getOrderStatus().equals(OrderStatusEnum.NEW_PAYED.getCode())) {
             log.error("【完结订单】订单状态不正确, orderId={}, orderStatus={}", orderDTO.getOrderId(), orderDTO.getOrderStatus());
             throw new SellException(ResultEnum.ORDER_STATUS_ERROR);
         }
@@ -202,20 +212,14 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderDTO paid(OrderDTO orderDTO) {
-        //判断订单状态
+        //判断订单状态,
         if (!orderDTO.getOrderStatus().equals(OrderStatusEnum.NEW.getCode())) {
             log.error("【订单支付完成】订单状态不正确, orderId={}, orderStatus={}", orderDTO.getOrderId(), orderDTO.getOrderStatus());
             throw new SellException(ResultEnum.ORDER_STATUS_ERROR);
         }
 
-        //判断支付状态
-        if (!orderDTO.getPayStatus().equals(PayStatusEnum.WAIT.getCode())) {
-            log.error("【订单支付完成】订单支付状态不正确, orderDTO={}", orderDTO);
-            throw new SellException(ResultEnum.ORDER_PAY_STATUS_ERROR);
-        }
-
         //修改支付状态
-        orderDTO.setPayStatus(PayStatusEnum.SUCCESS.getCode());
+        orderDTO.setOrderStatus(OrderStatusEnum.NEW_PAYED.getCode());
         OrderMaster orderMaster = new OrderMaster();
         BeanUtils.copyProperties(orderDTO, orderMaster);
         OrderMaster updateResult = orderMasterRepository.save(orderMaster);

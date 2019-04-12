@@ -2,8 +2,9 @@
 
 ### 管理后台
 - 1查看订单
-
+```
 http://localhost:8080/sell/seller/category/list
+```
 
 
 
@@ -91,53 +92,49 @@ items: [{
 }
 ```
 
-###订单列表
+###用户订单列表
 
 ```
-GET /sell/buyer/order/list
+GET /sell/buyer/order/listByStatus
 ```
 
 参数
 
 ```
 openid: 18eu2jwk2kse3r42e2e
-page: 0 //从第0页开始
-size: 10
+orderStatus: 0 //订单状态
 ```
 
 返回
 
 ```
 {
-  "code": 0,
-  "msg": "成功",
-  "data": [
-    {
-      "orderId": "161873371171128075",
-      "buyerName": "张三",
-      "buyerPhone": "18868877111",
-      "buyerAddress": "慕课网总部",
-      "buyerOpenid": "18eu2jwk2kse3r42e2e",
-      "orderAmount": 0,
-      "orderStatus": 0,
-      "payStatus": 0,
-      "createTime": 1490171219,
-      "updateTime": 1490171219,
-      "orderDetailList": null
-    },
-    {
-      "orderId": "161873371171128076",
-      "buyerName": "张三",
-      "buyerPhone": "18868877111",
-      "buyerAddress": "慕课网总部",
-      "buyerOpenid": "18eu2jwk2kse3r42e2e",
-      "orderAmount": 0,
-      "orderStatus": 0,
-      "payStatus": 0,
-      "createTime": 1490171219,
-      "updateTime": 1490171219,
-      "orderDetailList": null
-    }]
+    "code": 0,
+    "msg": "成功",
+    "data": [
+        {
+            "orderId": "1553935664782600004",
+            "buyerName": "qqqq",
+            "buyerPhone": "123",
+            "buyerAddress": "杭州",
+            "buyerOpenid": "123",
+            "orderAmount": 10,
+            "orderStatus": 2,
+            "createTime": "2019-03-30 16:47:44",
+            "updateTime": "2019-03-30 16:51:24",
+            "orderDetailList": [
+                {
+                    "detailId": "1553935664786497264",
+                    "orderId": "1553935664782600004",
+                    "productId": "1553653872948625698",
+                    "productName": "黑米粥",
+                    "productPrice": 5,
+                    "productQuantity": 2,
+                    "productIcon": "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2755523882,2215399258&fm=200&gp=0.jpg"
+                }
+            ]
+        }
+    ]
 }
 ```
 

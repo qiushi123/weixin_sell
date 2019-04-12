@@ -1,25 +1,30 @@
 package com.imooc.controller;
 
+import com.imooc.VO.ResultVO;
 import com.imooc.dto.OrderDTO;
+import com.imooc.enums.OrderStatusEnum;
 import com.imooc.enums.ResultEnum;
 import com.imooc.exception.SellException;
 import com.imooc.service.OrderService;
-import com.imooc.service.PayService;
-import com.lly835.bestpay.model.PayResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+import com.imooc.service.impl.PayService;
+import com.imooc.utils.ResultVOUtil;
 
-import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 支付
  * Created by 廖师兄
  * 2017-07-04 00:49
  */
-@Controller
+@RestController
 @RequestMapping("/pay")
+@Slf4j
 public class PayController {
 
     @Autowired
@@ -28,10 +33,8 @@ public class PayController {
     @Autowired
     private PayService payService;
 
-    @GetMapping("/create")
-    public ModelAndView create(@RequestParam("orderId") String orderId,
-                               @RequestParam("returnUrl") String returnUrl,
-                               Map<String, Object> map) {
+    @GetMapping("/goPay")
+    public ResultVO<Boolean> goPay(@RequestParam("orderId") String orderId) {
         //1. 查询订单
         OrderDTO orderDTO = orderService.findOne(orderId);
         if (orderDTO == null) {
@@ -39,23 +42,13 @@ public class PayController {
         }
 
         //2. 发起支付
-        PayResponse payResponse = payService.create(orderDTO);
-
-        map.put("payResponse", payResponse);
-        map.put("returnUrl", returnUrl);
-
-        return new ModelAndView("pay/create", map);
+        OrderDTO orderDTO1 = payService.goPay(orderDTO);
+        if (!orderDTO.getOrderStatus().equals(OrderStatusEnum.NEW_PAYED.getCode())) {
+            log.error("【取消订单】订单状态不正确,  orderStatus={}", orderDTO1.getOrderStatus());
+            throw new SellException(ResultEnum.ORDER_STATUS_ERROR);
+        }
+        return ResultVOUtil.success(true);
     }
 
-    /**
-     * 微信异步通知
-     * @param notifyData
-     */
-    @PostMapping("/notify")
-    public ModelAndView notify(@RequestBody String notifyData) {
-        payService.notify(notifyData);
 
-        //返回给微信处理结果
-        return new ModelAndView("pay/success");
-    }
 }

@@ -9,19 +9,24 @@ import com.imooc.form.OrderForm;
 import com.imooc.service.BuyerService;
 import com.imooc.service.OrderService;
 import com.imooc.utils.ResultVOUtil;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.validation.Valid;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Created by 廖师兄
@@ -63,19 +68,16 @@ public class BuyerOrderController {
     }
 
     //订单列表
-    @GetMapping("/list")
-    public ResultVO<List<OrderDTO>> list(@RequestParam("openid") String openid,
-                                         @RequestParam(value = "page", defaultValue = "0") Integer page,
-                                         @RequestParam(value = "size", defaultValue = "10") Integer size) {
+    @GetMapping("/listByStatus")
+    public ResultVO<List<OrderDTO>> listByStatus(@RequestParam("openid") String openid,
+                                                 @RequestParam(value = "orderStatus", defaultValue = "0") Integer orderStatus) {
         if (StringUtils.isEmpty(openid)) {
             log.error("【查询订单列表】openid为空");
             throw new SellException(ResultEnum.PARAM_ERROR);
         }
 
-        PageRequest request = new PageRequest(page, size);
-        Page<OrderDTO> orderDTOPage = orderService.findList(openid, request);
-
-        return ResultVOUtil.success(orderDTOPage.getContent());
+        List<OrderDTO> orderList = buyerService.findOrderList(openid, orderStatus);
+        return ResultVOUtil.success(orderList);
     }
 
 
@@ -85,6 +87,14 @@ public class BuyerOrderController {
                                      @RequestParam("orderId") String orderId) {
         OrderDTO orderDTO = buyerService.findOrderOne(openid, orderId);
         return ResultVOUtil.success(orderDTO);
+    }
+
+    //确认收货
+    @PostMapping("/sure")
+    public ResultVO sure(@RequestParam("openid") String openid,
+                           @RequestParam("orderId") String orderId) {
+        buyerService.cancelOrder(openid, orderId);
+        return ResultVOUtil.success();
     }
 
     //取消订单

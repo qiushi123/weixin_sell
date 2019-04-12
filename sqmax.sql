@@ -1,3 +1,8 @@
+drop database if exists sell;
+create database sell;
+use sell;
+
+-- 类目
 create table `product_category` (
     `category_id` int not null auto_increment,
     `category_name` varchar(64) not null comment '类目名字',
@@ -69,6 +74,9 @@ create table `comment` (
     `create_time` timestamp not null default current_timestamp comment '评论时间',
     primary key (`comment_id`)
 )comment '评论信息表';
+
+
+
 
 
 

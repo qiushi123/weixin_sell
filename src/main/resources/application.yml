@@ -4,17 +4,17 @@ spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     username: root
-    password: qcl123
-    url: jdbc:mysql://localhost/sell?characterEncoding=utf-8&useSSL=false
+    password: 123456
+    url: jdbc:mysql://localhost/sell?characterEncoding=utf-8&useSSL=false&serverTimeZone=UTC
   jpa:
     show-sql: true
-  #    hibernate:
-  #      ddl-auto: update
-  jackson:
-    default-property-inclusion: non_null
-  redis:
-    host: 127.0.0.1
-    port: 6379
+    hibernate:
+      ddl-auto: update
+#  jackson:
+#    default-property-inclusion: non_null
+#  redis:
+#    host: 127.0.0.1
+#    port: 6379
 
 
 #logging:
